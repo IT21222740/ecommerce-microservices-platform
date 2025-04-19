@@ -2,7 +2,8 @@ import uvicorn
 from fastapi import FastAPI
 from models import SignInSchema, SignUpSchema
 import pyrebase
-
+from fastapi.responses import JSONResponse
+from fastapi.exceptions import HTTPException
 
 
 app = FastAPI(
@@ -14,7 +15,7 @@ app = FastAPI(
 
 # Firebase Initialization
 import firebase_admin
-from firebase_admin import credentials
+from firebase_admin import credentials, auth
 
 if not firebase_admin._apps:
     cred = credentials.Certificate("ecommerce-microservices.json")
@@ -45,7 +46,23 @@ def health_check():
 
 @app.post("/SignUp")
 async def create_an_account(user: SignUpSchema):
-    pass
+    email = user.email
+    password = user.password
+    try:
+        user = auth.create_user(
+            email=email,
+            password=password,
+        )
+        return JSONResponse(status_code=201, content={"message": "User created successfully", "user_id": user.uid})
+    except auth.EmailAlreadyExistsError:
+        raise HTTPException(status_code=400, detail={"Email already exists":user.email})
+    except Exception as e:
+        raise HTTPException(status_code=500, detail="An error occurred while creating the user")
+
+
+
+
+
 
 @app.post("/SignIn")
 async def sign_in(SignIn: SignInSchema):
