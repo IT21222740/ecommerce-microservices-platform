@@ -66,8 +66,16 @@ async def create_an_account(user: SignUpSchema):
 
 @app.post("/SignIn")
 async def sign_in(SignIn: SignInSchema):
-    pass
+    email= SignIn.email
+    password= SignIn.password
 
+    try:
+        user = firebase.auth().sign_in_with_email_and_password(email=email, password=password)
+        token = user['idToken']
+        return JSONResponse(status_code=200, content={"message": "User signed in successfully", "token": token})
+    except Exception as e:
+        raise HTTPException(status_code=401, detail="Invalid credentials")
+   
 @app.post("/validate_token")
 async def validate_token():
     pass
