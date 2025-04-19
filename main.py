@@ -4,6 +4,7 @@ from models import SignInSchema, SignUpSchema
 import pyrebase
 from fastapi.responses import JSONResponse
 from fastapi.exceptions import HTTPException
+from fastapi.requests import Request
 
 
 app = FastAPI(
@@ -77,8 +78,15 @@ async def sign_in(SignIn: SignInSchema):
         raise HTTPException(status_code=401, detail="Invalid credentials")
    
 @app.post("/validate_token")
-async def validate_token():
-    pass
+async def validate_token(request:Request):
+    headers = request.headers
+    jwt = headers.get("Authorization")
+    if jwt is None:
+        raise HTTPException(status_code=401, detail="Token not provided")
+    
+    user = auth.verify_id_token(jwt)
+    return JSONResponse(status_code=200, content={"message": "Token is valid", "user_id": user['uid']})
+    
 
 
 if __name__ == "__main__":
