@@ -17,7 +17,7 @@ app = FastAPI(
 
 # Firebase Initialization
 import firebase_admin
-from firebase_admin import credentials
+from firebase_admin import credentials,auth
 
 if not firebase_admin._apps:
     cred = credentials.Certificate("ecommerce-microservices.json")
@@ -60,7 +60,17 @@ async def create_an_account(user: SignUpSchema):
     except Exception as e:
         raise HTTPException(status_code=500, detail="An error occurred while creating the user")
 
+@app.post("/SignIn")
+async def sign_in(SignIn: SignInSchema):
+    email= SignIn.email
+    password= SignIn.password
 
+    try:
+        user = firebase.auth().sign_in_with_email_and_password(email=email, password=password)
+        token = user['idToken']
+        return JSONResponse(status_code=200, content={"message": "User signed in successfully", "token": token})
+    except Exception as e:
+        raise HTTPException(status_code=401, detail="Invalid credentials")
 
 if __name__ == "__main__":
     uvicorn.run("main:app",reload=True)
