@@ -5,6 +5,7 @@ import pyrebase
 from fastapi.responses import JSONResponse
 from fastapi.exceptions import HTTPException
 from fastapi.requests import Request
+import os
 
 
 app = FastAPI(
@@ -16,12 +17,23 @@ app = FastAPI(
 
 
 # Firebase Initialization
-import firebase_admin
-from firebase_admin import credentials,auth
+firebase = None
+auth = None
 
-if not firebase_admin._apps:
-    cred = credentials.Certificate("ecommerce-microservices.json")
-    firebase_admin.initialize_app(cred)
+# ✅ Load Firebase only if not running tests
+if os.getenv("TESTING", "false") != "true":
+    import firebase_admin
+    from firebase_admin import credentials, auth as firebase_auth
+
+    if not firebase_admin._apps:
+        cred = credentials.Certificate("ecommerce-microservices.json")
+        firebase_admin.initialize_app(cred)
+
+    auth = firebase_auth
+else:
+    # In test mode, set `auth` to a mock object to avoid NoneType errors
+    from unittest.mock import MagicMock
+    auth = MagicMock()
 
 # Firebase Configuration
 firebaseConfig = {
