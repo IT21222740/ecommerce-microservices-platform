@@ -1,1 +1,8 @@
 ecommerce-microservices.json
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.env
+*.db
+*.sqlite3

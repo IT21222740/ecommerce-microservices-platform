@@ -7,7 +7,7 @@ class SignUpSchema(BaseModel):
 
 
     class Config:
-        schema_extra ={
+        json_schema_extra ={
             "example":{
                 "email":"sample@gmail.com",
                 "password":"samplepass123"
@@ -22,7 +22,7 @@ class SignInSchema(BaseModel):
 
     
     class Config:
-        schema_extra ={
+        json_schema_extra ={
             "example":{
                 "email":"sample@gmail.com",
                 "password":"samplepass123"
