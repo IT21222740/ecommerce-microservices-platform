@@ -11,5 +11,14 @@ app = FastAPI(
     version="1.0.0",
 )
 
+
+# Firebase Initialization
+import firebase_admin
+from firebase_admin import credentials
+
+if not firebase_admin._apps:
+    cred = credentials.Certificate("ecommerce-microservices.json")
+    firebase_admin.initialize_app(cred)
+
 if __name__ == "__main__":
     uvicorn.run("main:app",reload=True)
