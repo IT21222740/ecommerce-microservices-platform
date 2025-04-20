@@ -2,6 +2,9 @@ import uvicorn
 from fastapi import FastAPI
 from models import SignInSchema, SignUpSchema
 import pyrebase
+from fastapi.responses import JSONResponse
+from fastapi.exceptions import HTTPException
+from fastapi.requests import Request
 
 
 app = FastAPI(
@@ -32,7 +35,30 @@ firebaseConfig = {
   "databaseURL": ""
 }
 
+@app.get("/health")
+def health_check():
+    """
+    Health check endpoint to verify the service is running.
+    """
+    return {"status": "healthy"}
+
 firebase = pyrebase.initialize_app(firebaseConfig)
+
+
+@app.post("/SignUp")
+async def create_an_account(user: SignUpSchema):
+    email = user.email
+    password = user.password
+    try:
+        user = auth.create_user(
+            email=email,
+            password=password,
+        )
+        return JSONResponse(status_code=201, content={"message": "User created successfully", "user_id": user.uid})
+    except auth.EmailAlreadyExistsError:
+        raise HTTPException(status_code=400, detail={"Email already exists":user.email})
+    except Exception as e:
+        raise HTTPException(status_code=500, detail="An error occurred while creating the user")
 
 
 
