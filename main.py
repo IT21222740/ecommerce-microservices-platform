@@ -71,6 +71,18 @@ async def sign_in(SignIn: SignInSchema):
         return JSONResponse(status_code=200, content={"message": "User signed in successfully", "token": token})
     except Exception as e:
         raise HTTPException(status_code=401, detail="Invalid credentials")
+    
+
+@app.post("/validate_token")
+async def validate_token(request:Request):
+    headers = request.headers
+    jwt = headers.get("Authorization")
+    if jwt is None:
+        raise HTTPException(status_code=401, detail="Token not provided")
+    
+    user = auth.verify_id_token(jwt)
+    return JSONResponse(status_code=200, content={"message": "Token is valid", "user_id": user['uid']})
+    
 
 if __name__ == "__main__":
     uvicorn.run("main:app",reload=True)
