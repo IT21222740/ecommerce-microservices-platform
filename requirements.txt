@@ -2,4 +2,6 @@ fastapi
 uvicorn
 firebase_admin
 pyrebase4
-requests
+pytest
+pytest-mock
+httpx
