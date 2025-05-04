@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        IMAGE_NAME = "tharushaoff2001673/authService" 
+        IMAGE_NAME = "tharushaoff2001673/authService"
     }
 
     stages {
@@ -16,11 +16,11 @@ pipeline {
             steps {
                 script {
                     withCredentials([file(credentialsId: 'firebase-cred', variable: 'FIREBASE_CREDENTIALS_FILE')]) {
-                        sh """
+                        sh '''
                             cp ${FIREBASE_CREDENTIALS_FILE} ecommerce-microservices.json
                             docker build --build-arg FIREBASE_CREDENTIALS_FILE=ecommerce-microservices.json -t ${IMAGE_NAME}:latest .
                             rm ecommerce-microservices.json
-                        """
+                        '''
                     }
                 }
             }
