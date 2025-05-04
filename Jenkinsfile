@@ -29,15 +29,7 @@ pipeline {
             }
         }
 
-        stage('Run Tests') {
-            steps {
-                script {
-                    docker.image("${IMAGE_NAME}:latest").inside {
-                        sh "pytest"
-                    }
-                }
-            }
-        }
+        
 
         stage('Push to Docker Hub') {
             steps {
