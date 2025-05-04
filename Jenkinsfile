@@ -5,7 +5,7 @@ pipeline {
         IMAGE_NAME = "tharushaoff2001673/authService"
     }
 
-    stages {
+    stages { 
         stage('Checkout') {
             steps {
                 checkout scm
