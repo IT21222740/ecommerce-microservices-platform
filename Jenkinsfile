@@ -22,14 +22,22 @@ pipeline {
                         // Build the Docker image and pass the credentials file as an argument
                         sh '''
                             docker build --build-arg FIREBASE_CREDENTIALS_FILE=ecommerce-microservices.json -t ${IMAGE_NAME}:latest .
-                            rm ecommerce-microservices.json
+
                         '''
                     }
                 }
             }
         }
 
-        
+        stage('Run Tests') {
+            steps {
+                script {
+                    docker.image("${IMAGE_NAME}:latest").inside {
+                        sh "pytest"
+                    }
+                }
+            }
+        }
 
         stage('Push to Docker Hub') {
             steps {
