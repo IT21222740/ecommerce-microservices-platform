@@ -16,8 +16,11 @@ pipeline {
             steps {
                 script {
                     withCredentials([file(credentialsId: 'firebase-cred', variable: 'FIREBASE_CREDENTIALS_FILE')]) {
+                        // Copy the Firebase credentials file to the workspace
+                        sh 'cp ${FIREBASE_CREDENTIALS_FILE} ecommerce-microservices.json'
+
+                        // Build the Docker image and pass the credentials file as an argument
                         sh '''
-                            cp ${FIREBASE_CREDENTIALS_FILE} ecommerce-microservices.json
                             docker build --build-arg FIREBASE_CREDENTIALS_FILE=ecommerce-microservices.json -t ${IMAGE_NAME}:latest .
                             rm ecommerce-microservices.json
                         '''
