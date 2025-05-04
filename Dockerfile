@@ -8,13 +8,13 @@ ENV PYTHONUNBUFFERED 1
 WORKDIR /app
 
 # Copy requirement file
-COPY requirements.txt .
+COPY requirements.txt ./
 
 # Install dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy project files
-COPY . .
+COPY . ./
 
 # Accept build argument for the Firebase credentials file
 ARG FIREBASE_CREDENTIALS_FILE
