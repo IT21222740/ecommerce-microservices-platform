@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        IMAGE_NAME = "tharushaoff2001673/authService"
+        IMAGE_NAME = "tharushaoff2001673/authServicev2"
     }
 
     stages {
@@ -12,15 +12,12 @@ pipeline {
             }
         }
 
-        stage('Build Docker Image') {
+       
+        stage('Build & Tag Docker Image') {
             steps {
                 script {
-                    withCredentials([file(credentialsId: 'firebase-cred', variable: 'FIREBASE_CREDENTIALS_FILE')]) {
-                        sh """
-                            cp ${FIREBASE_CREDENTIALS_FILE} ecommerce-microservices.json
-                            docker build --build-arg FIREBASE_CREDENTIALS_FILE=ecommerce-microservices.json -t ${IMAGE_NAME}:latest .
-                            rm ecommerce-microservices.json
-                        """
+                    withDockerRegistry(credentialsId: 'docker-cred', toolName: 'docker') {
+                        sh "docker build -t ${IMAGE_NAME}:latest ."
                     }
                 }
             }
