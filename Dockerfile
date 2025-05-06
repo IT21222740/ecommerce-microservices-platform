@@ -16,10 +16,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy project files
 COPY . .
 
-# Accept build argument for the Firebase credentials file
-ARG FIREBASE_CREDENTIALS_FILE
-COPY ${FIREBASE_CREDENTIALS_FILE} ./ecommerce-microservices.json
-
 # Expose new port
 EXPOSE 8081
 
