@@ -1,7 +1,0 @@
-fastapi
-uvicorn
-firebase_admin
-pyrebase4
-pytest
-pytest-mock
-httpx

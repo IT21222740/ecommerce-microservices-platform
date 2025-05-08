@@ -1,0 +1,51 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: authservicev2
+spec:
+  selector:
+    matchLabels:
+      app: authservicev2
+  template:
+    metadata:
+      labels:
+        app: authservicev2
+    spec:
+      serviceAccountName: default
+      containers:
+        - name: authservicev2-container
+          image: tharushaoff2001673/authservicev2:latest
+          ports:
+            - containerPort: 8081
+          env:
+            - name: PORT
+              value: "8081"
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8081
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8081
+          resources:
+            requests:
+              cpu: 100m
+              memory: 64Mi
+            limits:
+              cpu: 200m
+              memory: 128Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: authservicev2
+spec:
+  type: LoadBalancer
+  selector:
+    app: authservicev2
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8081
