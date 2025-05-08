@@ -28,7 +28,7 @@ pipeline {
                     namespace: 'webapps', 
                     serverUrl: 'https://9BDE684D135594A495BC1AF574F8D4F5.yl4.ap-south-1.eks.amazonaws.com'
                 ]]) {
-                    sh "kubectl get all -n webapps"
+                    sh "kubectl get svc -n webapps"
                 }
             }
         }
