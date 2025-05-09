@@ -3,11 +3,6 @@ pipeline {
 
     environment {
         IMAGE_NAME = "tharushaoff2001673/authservicev3"
-        SONARQUBE_SCANNER = 'sonar-scanner'
-    }
-
-    tools {
-        sonarQubeScanner 'sonar-scanner'
     }
 
     stages {
@@ -20,7 +15,7 @@ pipeline {
         stage('SonarQube Scan') {
             steps {
                 withSonarQubeEnv('sonarqube') {
-                    sh "${tool SONARQUBE_SCANNER}/bin/sonar-scanner"
+                    sh 'sonar-scanner'
                 }
             }
         }
@@ -39,7 +34,7 @@ pipeline {
             steps {
                 script {
                     docker.image("${IMAGE_NAME}:latest").inside {
-                        sh "pytest || true" 
+                        sh "pytest || true"
                     }
                 }
             }
