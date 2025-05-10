@@ -15,7 +15,7 @@ spec:
       serviceAccountName: default
       containers:
         - name: authservicev2-container
-          image: tharushaoff2001673/authservicev2:latest
+          image: tharushaoff2001673/authservicev3:latest
           ports:
             - containerPort: 8081
           env:
