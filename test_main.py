@@ -100,5 +100,16 @@ def test_edit_profile_success(mock_auth):
     assert response.status_code == 200
     assert response.json()["message"] == "Profile updated successfully"
 
+@patch("routes.profile.auth")
+def test_edit_profile_server_error(mock_auth):
+    mock_auth.verify_id_token.side_effect = Exception("Bad token")
+
+    response = client.put("/edit_profile", json={
+        "full_name": "Jane"
+    }, headers={"Authorization": "Bearer bad-token"})
+
+    assert response.status_code == 500
+    assert "Bad token" in response.json()["detail"]    
+
 if __name__ == "__main__":
     pytest.main()
