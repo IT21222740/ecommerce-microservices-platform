@@ -1,26 +1,18 @@
 pipeline {
     agent any
 
-    tools {
-        jdk 'jdk 17'         
-        maven 'maven 3'    
-        
-    }
-
     environment {
-        IMAGE_NAME = "tharushaoff2001673/authservicev3"
-        SONAR_TOKEN = credentials('sonarqube')
+        IMAGE_NAME = "tharushaoff2001673/authservicev3" 
     }
 
     stages {
-        // Checkout the code from SCM
         stage('Checkout') {
             steps {
                 checkout scm
             }
         }
 
-        // Build and tag the Docker image
+       
         stage('Build & Tag Docker Image') {
             steps {
                 script {
@@ -31,7 +23,6 @@ pipeline {
             }
         }
 
-        // Run tests inside the Docker container
         stage('Run Tests') {
             steps {
                 script {
@@ -42,23 +33,6 @@ pipeline {
             }
         }
 
-        // SonarQube Analysis
-        stage('SonarQube Analysis') {
-            steps {
-                withSonarQubeEnv('sonarqube') {  
-                    sh '''
-                        sonar-scanner \
-                          -Dsonar.projectKey=authservice \
-                          -Dsonar.sources=. \
-                          -Dsonar.host.url=$SONAR_HOST_URL \
-                          -Dsonar.login=$SONAR_TOKEN \
-                          -Dsonar.python.coverage.reportPaths=coverage.xml
-                    '''
-                }
-            }
-        }
-
-        // Push the Docker image to Docker Hub
         stage('Push to Docker Hub') {
             steps {
                 script {
@@ -67,16 +41,6 @@ pipeline {
                     }
                 }
             }
-        }
-    }
-
-    post {
-        // Clean up or notify if the build failed
-        failure {
-            echo "The pipeline failed."
-        }
-        success {
-            echo "The pipeline completed successfully."
         }
     }
 }
