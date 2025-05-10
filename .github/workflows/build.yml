@@ -15,10 +15,12 @@ jobs:
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
 
-      # Run SonarQube scan
+      # Run SonarQube scan with debug logging
       - name: SonarQube Scan
         uses: sonarsource/sonarqube-scan-action@v2
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-          SONAR_PROJECT_KEY: 'ctse-microservice'  # This is where you set the project key
+          SONAR_PROJECT_KEY: 'ctse-microservice'  # Set your project key
+        with:
+          args: '-X'  # Enable full debug logging during the scan
