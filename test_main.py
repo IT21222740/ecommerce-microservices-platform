@@ -109,7 +109,29 @@ def test_edit_profile_server_error(mock_auth):
     }, headers={"Authorization": "Bearer bad-token"})
 
     assert response.status_code == 500
-    assert "Bad token" in response.json()["detail"]    
+    assert "Bad token" in response.json()["detail"] 
+
+
+#test case for view_profile 
+
+@patch("routes.profile.auth")
+def test_view_profile_success(mock_auth):
+    mock_auth.verify_id_token.return_value = {"uid": "user123", "role": "admin"}
+    mock_auth.get_user.return_value = MagicMock(
+        uid="user123",
+        email="test@example.com",
+        display_name="John Doe",
+        phone_number="+123456789",
+        email_verified=True
+    )
+
+    response = client.get("/view_profile", headers={"Authorization": "Bearer valid-token"})
+
+    assert response.status_code == 200
+    assert response.json()["profile"]["uid"] == "user123"
+    assert response.json()["profile"]["role"] == "admin"
+    assert response.json()["message"] == "Profile fetched successfully" 
+       
 
 if __name__ == "__main__":
     pytest.main()
