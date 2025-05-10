@@ -70,8 +70,35 @@ class TestAuthRoutes(unittest.TestCase):
 
 
 
-    
+    ##test cases for /set role
 
+@patch("routes.profile.auth")
+def test_set_role_success(mock_auth):
+    response = client.post("/set_role", json={
+        "uid": "test-user-uid",
+        "role": "admin"
+    })
+    mock_auth.set_custom_user_claims.assert_called_once_with("test-user-uid", {"role": "admin"})
+    assert response.status_code == 200
+    assert response.json() == {"message": "Role 'admin' has been set for user test-user-uid"}    
+
+#test case for edit_profile 
+
+@patch("routes.profile.auth")
+def test_edit_profile_success(mock_auth):
+    # Mock token verification
+    mock_auth.verify_id_token.return_value = {"uid": "user123"}
+
+    response = client.put("/edit_profile", json={
+        "full_name": "John Doe",
+        "phone_number": "+123456789"
+    }, headers={"Authorization": "Bearer fake-token"})
+
+    mock_auth.verify_id_token.assert_called_once_with("fake-token")
+    mock_auth.update_user.assert_called_once_with("user123", display_name="John Doe", phone_number="+123456789")
+
+    assert response.status_code == 200
+    assert response.json()["message"] == "Profile updated successfully"
 
 if __name__ == "__main__":
     pytest.main()
