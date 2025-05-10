@@ -1,10 +1,16 @@
 pipeline {
     agent any
 
+     tools {
+        jdk 'jdk 17'
+         maven 'maven 3'
+         
+    }
     environment {
         IMAGE_NAME = "tharushaoff2001673/authservicev3"
         SONAR_TOKEN = credentials('sonarqube')
     }
+    
 
     stages {
         // Checkout the code from SCM
