@@ -1,0 +1,26 @@
+name: Build
+
+on:
+  push:
+    branches:
+      - authServicev3
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+
+      # Run SonarQube scan with debug logging
+      - name: SonarQube Scan
+        uses: sonarsource/sonarqube-scan-action@v2
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+          SONAR_PROJECT_KEY: 'ctse-microservice'  # Set your project key
+        with:
+          args: '-X'  # Enable full debug logging during the scan
