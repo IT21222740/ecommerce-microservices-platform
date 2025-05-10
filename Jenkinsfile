@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         IMAGE_NAME = "tharushaoff2001673/authservicev3"
-        SONAR_TOKEN = credentials('sonar')
+        SONAR_TOKEN = credentials('sonarqube')
     }
 
     stages {
