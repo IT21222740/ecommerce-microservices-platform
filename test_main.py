@@ -133,5 +133,14 @@ def test_view_profile_success(mock_auth):
     assert response.json()["message"] == "Profile fetched successfully" 
        
 
+@patch("routes.profile.auth")
+def test_view_profile_error(mock_auth):
+    mock_auth.verify_id_token.side_effect = Exception("Invalid token")
+
+    response = client.get("/view_profile", headers={"Authorization": "Bearer invalid-token"})
+    assert response.status_code == 500
+    assert "Invalid token" in response.json()["detail"]
+    
+
 if __name__ == "__main__":
     pytest.main()
