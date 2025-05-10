@@ -5,7 +5,7 @@ from fastapi.exceptions import HTTPException
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from models import SignInSchema, SignUpSchema
 from Models.SetRoleSchema import SetRoleSchema
-from Models.EditProfileSchema import EditProfileSchema
+from Models.EditProfileSchema import EditProfileSchema 
 import pyrebase
 
 # Firebase Admin SDK
