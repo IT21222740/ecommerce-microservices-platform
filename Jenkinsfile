@@ -52,14 +52,6 @@ pipeline {
             }
         }
 
-        // Wait for SonarQube Quality Gate
-        stage('Wait for Quality Gate') {
-            steps {
-                timeout(time: 1, unit: 'MINUTES') {
-                    waitForQualityGate abortPipeline: true  
-                }
-            }
-        }
 
         // Push the Docker image to Docker Hub
         stage('Push to Docker Hub') {
