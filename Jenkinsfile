@@ -45,7 +45,7 @@ pipeline {
         // SonarQube Analysis
         stage('SonarQube Analysis') {
             steps {
-                withSonarQubeEnv('sonarqube') {  // Ensure this matches the configuration name of your SonarQube server in Jenkins
+                withSonarQubeEnv('sonarqube') {  
                     sh '''
                         sonar-scanner \
                           -Dsonar.projectKey=authservice \
