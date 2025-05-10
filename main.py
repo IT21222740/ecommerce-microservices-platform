@@ -1,8 +1,8 @@
 import uvicorn
 from fastapi import FastAPI
 from routes import auth, profile
-import base64
-# Initialize FastAPI app
+
+# Initialize FastAPI 
 app = FastAPI(
     title="User Account Management Service",
     version="1.0.0",
