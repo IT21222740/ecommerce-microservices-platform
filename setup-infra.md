@@ -81,7 +81,7 @@ eksctl create nodegroup --cluster=EKS-1 \
                        --nodes-max=4 \
                        --node-volume-size=20 \
                        --ssh-access \
-                       --ssh-public-key=DevOps \
+                       --ssh-public-key=ctse \
                        --managed \
                        --asg-access \
                        --external-dns-access \
