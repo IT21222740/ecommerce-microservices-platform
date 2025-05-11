@@ -8,6 +8,6 @@ class SignInSchema(BaseModel):
         json_schema_extra = {
             "example": {
                 "email": "sample@gmail.com",
-                "password": "samplepass123"
+                "password": ""
             }
         }
